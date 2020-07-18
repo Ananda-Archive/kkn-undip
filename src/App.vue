@@ -1,60 +1,44 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
+    <v-app-bar dark app flat color="#C0392B" class="absolute px-2">
+      <v-btn icon class="pa-1"><v-img src="./assets/logo-1.png" contain width="20"></v-img></v-btn>
+      <v-toolbar-title style="cursor: pointer" class="font-weight-bold">SRONDOL KULON</v-toolbar-title>
       <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-title class="mr-10" style="cursor: pointer"><span class="hoverMenu">Daftar UMKM</span></v-toolbar-title>
+      <v-toolbar-title class="mr-10" style="cursor: pointer"><span class="hoverMenu">Artikel</span></v-toolbar-title>
+      <v-toolbar-title class="mr-5" style="cursor: pointer"><span class="hoverMenu">Tentang</span></v-toolbar-title>
     </v-app-bar>
-
-    <v-content>
-      <HelloWorld/>
-    </v-content>
+    <router-view></router-view>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
   },
 
   data: () => ({
     //
   }),
+  
 };
 </script>
+
+<style scoped>
+  .hoverMenu:after {
+        content: '';
+        display: block;
+        margin: auto;
+        height: 3px;
+        width: 0px;
+        background: transparent;
+        transition: width .5s ease, background-color .5s ease;
+    }
+    .hoverMenu:hover:after {
+        width: 100%;
+        background: black;
+    }
+</style>
