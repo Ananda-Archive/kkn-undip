@@ -82,6 +82,8 @@
                 </v-col>
                 <v-col cols="12" md="8" lg="8" class="mx-auto">
                     <file-pond
+                        :allowDrop="!loadingRegister"
+                        :allowBrowse="!loadingRegister"
                         style="cursor: pointer"
                         name="test"
                         ref="pond"
