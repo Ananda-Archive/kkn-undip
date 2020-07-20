@@ -7,7 +7,47 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/Home.vue')
+    component: () => import('../views/Home.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/DaftarUMKM',
+    name: 'Register',
+    component: () => import('../views/Register.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/PendaftaranBerhasil',
+    name: 'SuccessRegister',
+    component: () => import('../views/SuccessRegister.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/loginAdmin',
+    name: 'LoginAdmin',
+    component: () => import('../views/Login.vue'),
+    meta: {
+      drawer:false,
+      auth: false
+    }
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: () => import('../views/Dashboard.vue'),
+    meta: {
+      drawer:false,
+      auth: true
+    }
   }
 ]
 

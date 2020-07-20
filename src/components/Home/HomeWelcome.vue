@@ -3,18 +3,23 @@
         <v-row no-gutters>
             <v-img
                 :min-height="'calc(100vh - ' + $vuetify.application.top + 'px)'"
-                src="https://arsitagx-master.s3.ap-southeast-1.amazonaws.com/img_large/2888/4071/28595/photo-mp-ruko-dan-pasar-modern-310516-pasmo-gresik-desain-arsitek-oleh-tyan-borland.jpeg"
+                src="@/assets/bg.jpeg"
             >
             <v-theme-provider dark>
                 <v-container fill-height>
                     <v-row align="center" class="white--text mx-auto" justify="center">
                         <v-col class="white--text text-center" cols="12" tag="h1">
-                            <span :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']" class="font-weight-light">
-                                WELCOME TO
+                            <span :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']" class="font-weight-thin">
+                                SELAMAT DATANG DI
                             </span>
                             <br>
-                            <span :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']" class="font-weight-black">
-                                VUETIFY
+                            <br>
+                            <span :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']" class="font-weight-light">
+                                WEBSITE PENDATAAN UMKM
+                            </span>
+                            <br>
+                            <span :class="[$vuetify.breakpoint.smAndDown ? 'display-3': 'display-4']" class="font-weight-light">
+                                KELURAHAN SRONDOL KULON
                             </span>
                         </v-col>
                         <v-btn class="align-self-end" fab outlined @click="$vuetify.goTo('#article')">
