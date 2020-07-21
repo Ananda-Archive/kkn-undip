@@ -90,7 +90,6 @@
                         label-idle="<span class='filepondFormatText'>Upload Gambar Produk atau Tempat Usaha (maksimal 7) </span><span class='filepondFormatText'>Format: JPG/PNG</span>"
                         v-bind:files="myFiles"
                         instant-upload="false"
-                        v-on:updatefiles="handleFilePondUpdateFile"
                         labelInvalidField="remove"
                         allow-multiple="true"
                         accepted-file-types="image/*"
@@ -138,7 +137,7 @@ export default {
             registerId:'',
             loadingRegister: false,
             datePickerMenu: false,
-            myFiles:[],
+            myFiles:['https://firebasestorage.googleapis.com/v0/b/kkn-srondol-kulon.appspot.com/o/0.6767943318626448_wwadawd.PNG?alt=media&token=abe2fa23-3fc7-4d04-a8eb-179adb8957c0'],
             user: {
                 name:'',
                 date: new Date().toISOString().substr(0, 10),
