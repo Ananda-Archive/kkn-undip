@@ -39,8 +39,31 @@
                         >
                             <template v-slot:item="{ item }">
                                 <v-card class="mt-1 mb-3 mx-2 pa-2" color="grey lighten-2" outlined>
-                                    <v-card-title class="body-2">{{item.companyName}}</v-card-title>
-                                    <v-card-subtitle class="text-left">{{item.name}}</v-card-subtitle>
+                                    <div class="d-flex flex-no-wrap justify-space-between align-center">
+                                        <div><v-card-title class="body-2 mt-n2">{{item.companyName}}</v-card-title></div>
+                                        <div class="mt-n2 mr-n2">
+                                            <v-menu
+                                                :close-on-click="true"
+                                                :close-on-content-click="true"
+                                                :offset-y="true"
+                                            >
+                                                <template v-slot:activator="{ on }">
+                                                    <v-card-actions><v-icon v-on="on">mdi-dots-vertical</v-icon></v-card-actions>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item @click.stop="editItem(item)">
+                                                        <v-list-item-title>Edit</v-list-item-title>
+                                                    </v-list-item>
+                                                    <v-list-item @click.stop="confirmDelete(item)">
+                                                        <v-list-item-title>Hapus</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-no-wrap justify-space-between align-center">
+                                        <div><v-card-subtitle class="text-left">{{item.name}}</v-card-subtitle></div>
+                                    </div>
                                 </v-card>
                             </template>
                         </v-data-table>
@@ -78,6 +101,7 @@
                                                         class="mb-n6"
                                                         dense
                                                         outlined
+                                                        label="Status"
                                                         :items="selected"
                                                         item-text="val"
                                                         item-value="id"

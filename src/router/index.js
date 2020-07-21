@@ -48,7 +48,16 @@ Vue.use(VueRouter)
       drawer:false,
       auth: true
     }
-  }
+  },
+  {
+    path: '/dashboardArticle',
+    name: 'DashboardArticle',
+    component: () => import('../views/AdminArticle.vue'),
+    meta: {
+      drawer:false,
+      auth: true
+    }
+  },
 ]
 
 const router = new VueRouter({
