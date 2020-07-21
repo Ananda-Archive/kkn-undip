@@ -4,6 +4,7 @@
       <v-btn @click="goTo('/')" icon class="pa-1"><v-img src="./assets/logo-1.png" contain width="20"></v-img></v-btn>
       <v-toolbar-title @click="goTo('/')" style="cursor: pointer" class="font-weight-bold">SRONDOL KULON</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-toolbar-title @click="goTo('/Dashboard')" v-if="this.uid" class="mr-10" style="cursor: pointer"><span class="hoverMenu">Dashboard</span></v-toolbar-title>
       <v-toolbar-title class="mr-10" style="cursor: pointer"><span class="hoverMenu">Daftar UMKM</span></v-toolbar-title>
       <v-toolbar-title class="mr-10" style="cursor: pointer"><span class="hoverMenu" @click="$vuetify.goTo('#article')">Artikel</span></v-toolbar-title>
       <v-toolbar-title class="mr-5" style="cursor: pointer"><span class="hoverMenu">Tentang</span></v-toolbar-title>
@@ -53,6 +54,9 @@ export default {
   },
 
   computed: {
+    uid() {
+        return this.$store.state.uid
+    },
     homeNav() {
       return this.$store.state.homeNav
     },

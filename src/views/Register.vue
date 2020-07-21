@@ -90,6 +90,7 @@
                         label-idle="<span class='filepondFormatText'>Upload Gambar Produk atau Tempat Usaha (maksimal 7) </span><span class='filepondFormatText'>Format: JPG/PNG</span>"
                         v-bind:files="myFiles"
                         instant-upload="false"
+                        v-on:updatefiles="handleFilePondUpdateFile"
                         labelInvalidField="remove"
                         allow-multiple="true"
                         accepted-file-types="image/*"
@@ -98,7 +99,7 @@
                     />
                 </v-col>
                 <v-col cols="12" class="text-center">
-                        <v-btn :disabled="loadingRegister" @click="add()" class="green white--text" width="200px" x-large>
+                        <v-btn :disabled="buttonStatus" @click="add()" class="green white--text" width="200px" x-large>
                             <span v-if="loadingRegister">
                                 <v-progress-circular size="20" :indeterminate="loadingRegister"></v-progress-circular>
                             </span>
@@ -137,7 +138,7 @@ export default {
             registerId:'',
             loadingRegister: false,
             datePickerMenu: false,
-            myFiles:['https://firebasestorage.googleapis.com/v0/b/kkn-srondol-kulon.appspot.com/o/0.6767943318626448_wwadawd.PNG?alt=media&token=abe2fa23-3fc7-4d04-a8eb-179adb8957c0'],
+            myFiles:[],
             user: {
                 name:'',
                 date: new Date().toISOString().substr(0, 10),
@@ -146,7 +147,7 @@ export default {
                 address:'',
                 companyName:'',
                 desc:'',
-                status:0,
+                status:1,
                 img:[]
             },
             userDefault: {
@@ -157,7 +158,7 @@ export default {
                 address:'',
                 companyName:'',
                 desc:'',
-                status:0,
+                status:1,
                 img:[]
             },
             rules: {
@@ -225,6 +226,23 @@ export default {
             this.myFiles = files.map(files => files.file);
         }
     },
+
+    computed: {
+        buttonStatus() {
+            if(this.loadingRegister) {
+                return true
+            } else {
+                for(let i=0; i<this.myFiles.length; i++) {
+                    if(this.myFiles[i]['type'] === 'image/png' || this.myFiles[i]['type'] === 'image/jpeg' || this.myFiles[i]['type'] === 'image/jpg') {
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+    }
 }
 </script>
 
