@@ -117,6 +117,7 @@
 
 import { db } from '../firebase';
 import firebase from 'firebase';
+// import moment from 'moment'
 // import _ from 'lodash';
 import vueFilePond from 'vue-filepond'
 import 'filepond/dist/filepond.min.css'
@@ -142,7 +143,7 @@ export default {
             user: {
                 name:'',
                 date: new Date().toISOString().substr(0, 10),
-                registerDate: new Date().toISOString().substr(0, 10),
+                registerDate: firebase.firestore.FieldValue.serverTimestamp(),
                 nomorUsaha:'',
                 address:'',
                 companyName:'',
@@ -153,7 +154,7 @@ export default {
             userDefault: {
                 name:'',
                 date: new Date().toISOString().substr(0, 10),
-                registerDate: new Date().toISOString().substr(0, 10),
+                registerDate: firebase.firestore.FieldValue.serverTimestamp(),
                 nomorUsaha:'',
                 address:'',
                 companyName:'',
@@ -220,7 +221,6 @@ export default {
                         this.loadingRegister = false
                     })
             }
-
         },
         handleFilePondUpdateFile(files) {
             this.myFiles = files.map(files => files.file);

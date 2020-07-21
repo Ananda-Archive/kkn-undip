@@ -80,6 +80,134 @@
                         </template>
                         </v-data-table>
                     </v-col>
+                    <!-- Add -->
+                    <v-btn fab dark large color="#C0392B" fixed right bottom @click="addDialogFunction">
+                        <v-icon dark>mdi-plus</v-icon>
+                    </v-btn>
+                    <v-dialog v-model="addDialog" persistent max-width="1200px">
+                        <v-card>
+                            <template slot="progress">
+                                <v-progress-linear height="8" color="red" indeterminate></v-progress-linear>
+                            </template>
+                            <v-toolbar dense flat>
+                                <span class="title font-weight-light">Tambah UMKM</span>
+                                <v-btn absolute right icon @click="close"><v-icon>mdi-close</v-icon></v-btn>
+                            </v-toolbar>
+                            <v-form ref="form">
+                                <v-card-text>
+                                    <v-row>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-text-field
+                                                v-model="umkm.name"
+                                                outlined
+                                                dense
+                                                label="Nama (Sesuai Dengan KTP)"
+                                                :rules="rules.name"
+                                                class="mb-n6"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-menu
+                                                v-model="datePickerMenuAdd"
+                                                :close-on-content-click="false"
+                                                :nudge-right="40"
+                                                transition="scale-transition"
+                                                offset-y
+                                                min-width="290px"
+                                            >
+                                                <template v-slot:activator="{on,attrs}">
+                                                    <v-text-field
+                                                        v-model="umkm.date"
+                                                        label="Tanggal Lahir"
+                                                        outlined
+                                                        dense
+                                                        readonly
+                                                        v-bind="attrs"
+                                                        v-on="on"
+                                                        class="mb-n6"
+                                                    ></v-text-field>
+                                                </template>
+                                                <v-date-picker v-model="umkm.date" @input="datePickerMenuAdd = false"></v-date-picker>
+                                            </v-menu>
+                                        </v-col>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-text-field
+                                            v-model="umkm.companyName"
+                                                outlined
+                                                dense
+                                                label="Nama Usaha"
+                                                :rules="rules.companyName"
+                                                class="mb-n6"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-text-field
+                                                v-model="umkm.nomorUsaha"
+                                                outlined
+                                                dense
+                                                label="Nomor Izin Usaha"
+                                                :rules="rules.nomorUsaha"
+                                                class="mb-n6"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-textarea
+                                                outlined
+                                                label="Alamat Usaha"
+                                                :auto-grow="true"
+                                                :rows="1"
+                                                v-model="umkm.address"
+                                                :rules="rules.address"
+                                                class="mb-n6"
+                                            ></v-textarea>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-textarea
+                                                outlined
+                                                counter
+                                                label="Deskripsi Usaha"
+                                                :auto-grow="true"
+                                                :rows="1"
+                                                v-model="umkm.desc"
+                                                :rules="rules.desc"
+                                                class="mb-n6"
+                                            ></v-textarea>
+                                        </v-col>
+                                        <v-col cols="12" md="8" lg="8" class="mx-auto">
+                                            <file-pond
+                                                :allowDrop="!loadingState"
+                                                :allowBrowse="!loadingState"
+                                                style="cursor: pointer"
+                                                name="test"
+                                                ref="pond"
+                                                label-idle="<span class='filepondFormatText'>Upload Gambar Produk atau Tempat Usaha (maksimal 7) </span><span class='filepondFormatText'>Format: JPG/PNG</span>"
+                                                v-bind:files="myFiles"
+                                                instant-upload="false"
+                                                v-on:updatefiles="handleFilePondUpdateFile"
+                                                labelInvalidField="remove"
+                                                allow-multiple="true"
+                                                accepted-file-types="image/*"
+                                                fileValidateTypeLabelExpectedTypes="Hanya menerima format JPG dan PNG"
+                                                maxFiles="7"
+                                            />
+                                        </v-col>
+                                    </v-row>
+                                </v-card-text>
+                            </v-form>
+                            <v-card-actions>
+                                <v-container>
+                                    <v-row justify="center">
+                                        <v-btn :disabled="buttonStatus" large class="my-n11" color="blue darken-1 white--text" @click="add">
+                                            <span v-if="loadingState">
+                                                <v-progress-circular size="20" :indeterminate="loadingState"></v-progress-circular>
+                                            </span>
+                                            <span v-else>Tambah</span>
+                                        </v-btn>
+                                    </v-row>
+                                </v-container>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                     <!-- Edit -->
                     <v-dialog v-model="editDialog" persistent max-width="1200px">
                         <v-card>
@@ -320,7 +448,7 @@ export default {
             registeredUmkms: [],
             umkm: {
                 name:'',
-                date: '',
+                date: new Date().toISOString().substr(0, 10),
                 registerDate: '',
                 nomorUsaha:'',
                 address:'',
@@ -331,7 +459,7 @@ export default {
             },
             umkmDefault: {
                 name:'',
-                date: '',
+                date: new Date().toISOString().substr(0, 10),
                 registerDate: '',
                 nomorUsaha:'',
                 address:'',
@@ -347,6 +475,7 @@ export default {
             selectedIndex:-1,
             selectedImg:-1,
             datePickerMenu: false,
+            datePickerMenuAdd: false,
             rules: {
                 name: [
                     v => !!v || 'Nama Harus Diisi'
@@ -366,7 +495,8 @@ export default {
             },
             panel:1,
             // Dialog
-            editDialog: false
+            editDialog: false,
+            addDialog: false,
         }
     },
 
@@ -380,6 +510,9 @@ export default {
     },
 
     methods: {
+        addDialogFunction() {
+            this.addDialog = true
+        },
         editItem(item) {
             this.selectedIndex = this.umkms.indexOf(item)
             this.umkm = _.cloneDeep(item)
@@ -389,6 +522,7 @@ export default {
             this.umkm = _.cloneDeep(this.umkmDefault)
             this.editDialog = false
             this.confirmDeleteDialog = false
+            this.addDialog = false
             this.tempDeletedImg = []
             this.myFiles = []
             this.selectedImg = -1
@@ -403,7 +537,6 @@ export default {
         handleFilePondUpdateFile(files) {
             this.myFiles = files.map(files => files.file);
         },
-        // Firebase API
         get() {
             let umkms = []
             db.collection('umkm')
@@ -464,6 +597,48 @@ export default {
                 })
             })
         },
+        // Firebase API
+        async add() {
+            if(this.$refs.form.validate()) {
+                this.loadingState = true
+                for(let i=0; i<this.myFiles.length; i++) {
+                    await this.addImage(this.myFiles[i])
+                        .then((response) => {
+                            this.umkm.img.push(response)
+                        })
+                        .catch(() => {
+                            console.log("gagal")
+                        })
+                }
+                db.collection("umkm")
+                    .add({
+                        name:this.umkm.name,
+                        date:this.umkm.date,
+                        registerDate: firebase.firestore.FieldValue.serverTimestamp(),
+                        nomorUsaha:this.umkm.nomorUsaha,
+                        address:this.umkm.address,
+                        companyName:this.umkm.companyName,
+                        desc:this.umkm.desc,
+                        status:2,
+                        img:this.umkm.img
+                    })
+                    .then((docRef) => {
+                        console.log("Document successfully written!, ID: ", docRef.id);
+                        this.snackbarMessage = 'Berhasil Ditambah'
+                        this.snackbarColor = 'success'
+                    })
+                    .catch(() => {
+                        this.snackbarMessage = 'Gagal Ditambah'
+                        this.snackbarColor = 'error'
+                    })
+                    .finally(() => {
+                        this.snackbar = true
+                        this.close()
+                        this.get()
+                        this.loadingState = false
+                    })
+            }
+        },
         // update umkm
         async updateItem() {
             if(this.$refs.form.validate()) {
@@ -492,7 +667,7 @@ export default {
                     .update({
                         name:this.umkm.name,
                         date: this.umkm.date,
-                        registerDate: this.umkm.registerDate,
+                        registerDate: firebase.firestore.FieldValue.serverTimestamp(),
                         nomorUsaha:this.umkm.nomorUsaha,
                         address:this.umkm.address,
                         companyName:this.umkm.companyName,
