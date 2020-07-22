@@ -35,12 +35,14 @@
                             :headers="umkmHeaders"
                             :items="umkms"
                             :search="searchUsaha"
+                            :disable-sort="true"
+                            class="mt-n10"
                             v-if="$vuetify.breakpoint.smAndDown"
                         >
                             <template v-slot:item="{ item }">
                                 <v-card class="mt-1 mb-3 mx-2 pa-2" color="grey lighten-2" outlined>
                                     <div class="d-flex flex-no-wrap justify-space-between align-center">
-                                        <div><v-card-title class="body-2 mt-n2">{{item.companyName}}</v-card-title></div>
+                                        <div><v-card-title class="text-left body-2 mt-n2">{{item.companyName}}</v-card-title></div>
                                         <div class="mt-n2 mr-n2">
                                             <v-menu
                                                 :close-on-click="true"
@@ -81,7 +83,7 @@
                         </v-data-table>
                     </v-col>
                     <!-- Add -->
-                    <v-btn fab dark large color="#C0392B" fixed right bottom @click="addDialogFunction">
+                    <v-btn fab dark large color="#C0392B" fixed left bottom @click="addDialogFunction">
                         <v-icon dark>mdi-plus</v-icon>
                     </v-btn>
                     <v-dialog v-model="addDialog" persistent max-width="1200px">
@@ -96,13 +98,23 @@
                             <v-form ref="form">
                                 <v-card-text>
                                     <v-row>
-                                        <v-col cols="12" md="6" lg="6">
+                                        <v-col cols="12">
                                             <v-text-field
                                                 v-model="umkm.name"
                                                 outlined
                                                 dense
                                                 label="Nama (Sesuai Dengan KTP)"
                                                 :rules="rules.name"
+                                                class="mb-n6"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-text-field
+                                                v-model="umkm.phone"
+                                                outlined
+                                                dense
+                                                label="Nomor HP"
+                                                :rules="rules.phone"
                                                 class="mb-n6"
                                             ></v-text-field>
                                         </v-col>
@@ -238,13 +250,23 @@
                                                 </v-col>
                                             </v-row>
                                         </v-col>
-                                        <v-col cols="12" md="6" lg="6">
+                                        <v-col cols="12">
                                             <v-text-field
                                                 v-model="umkm.name"
                                                 outlined
                                                 dense
                                                 label="Nama (Sesuai Dengan KTP)"
                                                 :rules="rules.name"
+                                                class="mb-n6"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" md="6" lg="6">
+                                            <v-text-field
+                                                v-model="umkm.phone"
+                                                outlined
+                                                dense
+                                                label="Nomor HP"
+                                                :rules="rules.phone"
                                                 class="mb-n6"
                                             ></v-text-field>
                                         </v-col>
@@ -312,6 +334,17 @@
                                                 :rows="1"
                                                 v-model="umkm.desc"
                                                 :rules="rules.desc"
+                                                class="mb-n6"
+                                            ></v-textarea>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-textarea
+                                                v-if="umkm.status == 3"
+                                                outlined
+                                                label="Alasan Ditolak"
+                                                :auto-grow="true"
+                                                :rows="1"
+                                                v-model="umkm.rejected"
                                                 class="mb-n6"
                                             ></v-textarea>
                                         </v-col>
@@ -441,7 +474,8 @@ export default {
             snackbarColor: '',
             selected:[
                 {id:1,val:'Belum Terdaftar'},
-                {id:2,val:'Terdaftar'}
+                {id:2,val:'Terdaftar'},
+                {id:3,val:'Ditolak'}
             ],
             umkms: [],
             unregisteredUmkms: [],
@@ -454,8 +488,10 @@ export default {
                 address:'',
                 companyName:'',
                 desc:'',
+                phone:'',
                 status:null,
-                img:[]
+                img:[],
+                rejected:''
             },
             umkmDefault: {
                 name:'',
@@ -465,8 +501,10 @@ export default {
                 address:'',
                 companyName:'',
                 desc:'',
+                phone:'',
                 status:null,
-                img:[]
+                img:[],
+                rejected:''
             },
             tempDeletedImg: [],
             myFiles:[],
@@ -491,6 +529,10 @@ export default {
                 ],
                 desc: [
                     v => !!v || 'Deskripsi Harus Diisi'
+                ],
+                phone: [
+                    v => !!v || 'Nomor HP Harus Diisi',
+                    v => v.length>6 || 'Minimal 6'
                 ],
             },
             panel:1,
@@ -552,8 +594,10 @@ export default {
                             address:doc.data().address,
                             companyName:doc.data().companyName,
                             desc:doc.data().desc,
+                            phone:doc.data().phone,
                             status:doc.data().status,
-                            img:doc.data().img
+                            img:doc.data().img,
+                            rejected:doc.data().rejected
                         })
                         console.log(doc.id, " => ", doc.data())
                     });
@@ -565,7 +609,7 @@ export default {
                     this.unregisteredUmkms = []
                     this.registeredUmkms = []
                     umkms.forEach(e => {
-                        if(e.status == 0) {
+                        if(e.status == 1) {
                             this.unregisteredUmkms.push(e)
                         } else {
                             this.registeredUmkms.push(e)
@@ -619,8 +663,10 @@ export default {
                         address:this.umkm.address,
                         companyName:this.umkm.companyName,
                         desc:this.umkm.desc,
+                        phone:this.umkm.phone,
                         status:2,
-                        img:this.umkm.img
+                        img:this.umkm.img,
+                        rejected:this.umkm.rejected
                     })
                     .then((docRef) => {
                         console.log("Document successfully written!, ID: ", docRef.id);
@@ -672,8 +718,10 @@ export default {
                         address:this.umkm.address,
                         companyName:this.umkm.companyName,
                         desc:this.umkm.desc,
+                        phone:this.umkm.phone,
                         status:this.umkm.status,
-                        img:this.umkm.img
+                        img:this.umkm.img,
+                        rejected:this.umkm.rejected
                     })
                     .then(() => {
                         this.snackbarMessage = 'Berhasil Diperbaharui'

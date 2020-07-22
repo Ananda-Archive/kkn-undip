@@ -14,6 +14,33 @@ Vue.use(VueRouter)
     }
   },
   {
+    path: '/ListArticle',
+    name: 'ListArticle',
+    component: () => import('../views/ListArticle.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/Article/:id',
+    name: 'Article',
+    component: () => import('../views/Article.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/ListUmkm',
+    name: 'ListUmkm',
+    component: () => import('../views/ListUmkm.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
     path: '/DaftarUMKM',
     name: 'Register',
     component: () => import('../views/Register.vue'),
@@ -26,6 +53,15 @@ Vue.use(VueRouter)
     path: '/PendaftaranBerhasil',
     name: 'SuccessRegister',
     component: () => import('../views/SuccessRegister.vue'),
+    meta: {
+      drawer:true,
+      auth: false
+    }
+  },
+  {
+    path: '/CekPendaftaran',
+    name: 'Check',
+    component: () => import('../views/Check.vue'),
     meta: {
       drawer:true,
       auth: false

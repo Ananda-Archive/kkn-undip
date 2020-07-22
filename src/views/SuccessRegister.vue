@@ -17,7 +17,7 @@
                 <span style="pointer-events: initial;">Klik untuk salin</span>
               </v-tooltip>
               <br>
-              <p>Silahkan simpan kode ini untuk mengecek status request UMKM anda <span class="blue--text" style="cursor: pointer; border-bottom: 1px solid #2196F3">Disini</span></p>
+              <p>Silahkan simpan kode ini untuk mengecek status request UMKM anda <span @click="goTo()" class="blue--text" style="cursor: pointer; border-bottom: 1px solid #2196F3">Disini</span></p>
             </v-col>
           </v-row>
         </v-container>
@@ -44,7 +44,11 @@ export default {
         input_temp.select();
         document.execCommand("copy");
         document.body.removeChild(input_temp);
-      }
+      },
+
+      goTo() {
+            this.$router.push('/CekPendaftaran')
+        }
     },
 
     computed: {

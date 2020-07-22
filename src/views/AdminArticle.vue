@@ -18,15 +18,51 @@
                             :headers="articleHeaders"
                             :items="articles"
                             :search="searchArticle"
+                            v-if="!$vuetify.breakpoint.smAndDown"
                         >
                             <template v-slot:item.actions="{ item }">
                                 <v-icon class="mr-4" @click.stop="editItem(item)">mdi-pencil</v-icon>
                                 <v-icon @click.stop="confirmDelete(item)">mdi-delete</v-icon>
                             </template>
                         </v-data-table>
+                        <v-data-table
+                            v-else
+                            :headers="articleHeaders"
+                            :items="articles"
+                            :search="searchArticle"
+                            :disable-sort="true"
+                            class="mt-n10"
+                        >
+                            <template v-slot:item="{ item }">
+                                <v-card class="mt-1 mb-3 mx-2 pa-2" color="grey lighten-2" outlined>
+                                    <div class="d-flex flex-no-wrap justify-space-between align-center">
+                                        <div><v-card-title class="text-left body-2 mt-n2">{{item.title}}</v-card-title></div>
+                                        <div class="mt-n2 mr-n2">
+                                            <v-menu
+                                                :close-on-click="true"
+                                                :close-on-content-click="true"
+                                                :offset-y="true"
+                                            >
+                                                <template v-slot:activator="{ on }">
+                                                    <v-card-actions><v-icon v-on="on">mdi-dots-vertical</v-icon></v-card-actions>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item @click.stop="editItem(item)">
+                                                        <v-list-item-title>Edit</v-list-item-title>
+                                                    </v-list-item>
+                                                    <v-list-item @click.stop="confirmDelete(item)">
+                                                        <v-list-item-title>Hapus</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
+                                        </div>
+                                    </div>
+                                </v-card>
+                            </template>
+                        </v-data-table>
                     </v-col>
                     <!-- add -->
-                    <v-btn fab dark large color="#C0392B" fixed right bottom @click="addDialogFunction">
+                    <v-btn fab dark large color="#C0392B" fixed left bottom @click="addDialogFunction">
                         <v-icon dark>mdi-plus</v-icon>
                     </v-btn>
                     <v-dialog v-model="addDialog" persistent max-width="1100px">
@@ -43,6 +79,8 @@
                                                 outlined
                                                 v-model="article.title"
                                                 label="Judul Artikel"
+                                                :rules="rules.title"
+                                                counter
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" class="mt-n6">
@@ -97,6 +135,8 @@
                                                 outlined
                                                 v-model="article.title"
                                                 label="Judul Artikel"
+                                                :rules="rules.title"
+                                                counter
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12" class="mt-n6">
@@ -273,6 +313,12 @@ export default {
             addDialog: false,
             editDialog: false,
             confirmDeleteDialog:false,
+            rules: {
+                title: [
+                    v => !!v || 'Judul Harus Diisi',
+                    v => v.length>39 || 'Minimal 40 Karakter'
+                ],
+            }
         }
     },
     mounted(){
@@ -431,7 +477,6 @@ export default {
                             console.log("gagal")
                         })
                 }
-            }
             db.collection('article')
                 .add({
                     title:this.article.title,
@@ -444,19 +489,26 @@ export default {
                 })
                 .then((docRef) => {
                     console.log("Document successfully written!, ID: ", docRef.id);
+                    this.snackbarMessage = 'Berhasil Dibuat'
+                    this.snackbarColor = 'success'
                 })
                 .catch((error) => {
                     console.error("Error writing document: ", error);
+                    this.snackbarMessage = 'Gagal Dibuat'
+                    this.snackbarColor = 'error'
                 })
                 .finally(() => {
+                    this.snackbar = true
                     this.close()
                     this.get()
                     this.loadingState = false
                 })
+            }
         },
         get() {
             let articles = []
             db.collection('article')
+                .orderBy('created','desc')
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {

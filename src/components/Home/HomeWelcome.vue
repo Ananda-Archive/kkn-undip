@@ -7,7 +7,7 @@
             >
             <v-theme-provider dark>
                 <v-container fill-height>
-                    <v-row align="center" class="white--text mx-auto" justify="center">
+                    <v-row align="center" class="ma-n4 white--text mx-auto" justify="center">
                         <v-col class="white--text text-center" cols="12" tag="h1">
                             <span :class="[$vuetify.breakpoint.smAndDown ? 'display-1' : 'display-2']" class="font-weight-thin">
                                 SELAMAT DATANG DI

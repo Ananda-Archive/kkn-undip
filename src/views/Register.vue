@@ -7,13 +7,23 @@
                     <h1 class="font-weight-medium">DAFTAR UMKM</h1>
                     <v-divider></v-divider>
                 </v-col>
-                <v-col cols="12" md="6" lg="6">
+                <v-col cols="12">
                     <v-text-field
                         v-model="user.name"
                         outlined
                         dense
                         label="Nama (Sesuai Dengan KTP)"
                         :rules="rules.name"
+                        class="mb-n6"
+                    ></v-text-field>
+                </v-col>
+                <v-col cols="12" md="6" lg="6">
+                    <v-text-field
+                        v-model="user.phone"
+                        outlined
+                        dense
+                        label="Nomor HP"
+                        :rules="rules.phone"
                         class="mb-n6"
                     ></v-text-field>
                 </v-col>
@@ -159,6 +169,7 @@ export default {
                 address:'',
                 companyName:'',
                 desc:'',
+                phone:'',
                 status:1,
                 img:[]
             },
@@ -177,6 +188,10 @@ export default {
                 ],
                 desc: [
                     v => !!v || 'Deskripsi Harus Diisi'
+                ],
+                phone: [
+                    v => !!v || 'Nomor HP Harus Diisi',
+                    v => v.length>6 || 'Minimal 6'
                 ],
             }
         }
