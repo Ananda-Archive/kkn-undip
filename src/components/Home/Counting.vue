@@ -2,7 +2,7 @@
   <section id="counting">
       <v-parallax
         :height="$vuetify.breakpoint.smAndDown ? 600 : 500"
-        src="@/assets/bg.jpeg"
+        src="@/assets/bg.jpg"
       >
         <v-container fill-height>
             <v-row class="mx-auto">
