@@ -491,7 +491,7 @@ export default {
                 phone:'',
                 status:null,
                 img:[],
-                rejected:''
+                rejected:null
             },
             umkmDefault: {
                 name:'',
@@ -504,7 +504,7 @@ export default {
                 phone:'',
                 status:null,
                 img:[],
-                rejected:''
+                rejected:null
             },
             tempDeletedImg: [],
             myFiles:[],

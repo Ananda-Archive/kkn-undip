@@ -159,7 +159,8 @@ export default {
                 companyName:'',
                 desc:'',
                 status:1,
-                img:[]
+                rejected:null,
+                img:[],
             },
             userDefault: {
                 name:'',
@@ -171,6 +172,7 @@ export default {
                 desc:'',
                 phone:'',
                 status:1,
+                rejected:null,
                 img:[]
             },
             rules: {
